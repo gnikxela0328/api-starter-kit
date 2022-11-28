@@ -2,7 +2,7 @@ from api.database import db
 
 class AuthModel(db.Model):
 
-    __tablename__ = "login"
+    __tablename__ = "auth"
 
     """
     Allowed data
@@ -10,23 +10,27 @@ class AuthModel(db.Model):
     uuid=db.Column(db.Integer, primary_key=True, autoincrement="auto")
     email = db.Column(db.String(255),nullable=False)
     password = db.Column(db.String(255),nullable=False)
+    current_token = db.Column(db.String(311))
 
     """
     Initialize model
     """
-    def __init__(self, uuid, email, password):
+    def __init__(self, uuid, email, password, current_token):
         self.uuid = uuid
         self.email = email
         self.password = password
+        self.current_token = current_token
 
-    ## TODO
     def find_by_email(email):
-        return None
+        user = AuthModel.query.filter_by(email=email).first()
+        if user:
+            return user
+        else:
+            return None
 
-    ## TODO
-    def update_token(email, token):
-        return None
-        
+    def update_token(user, token):
+        user.current_token = token
+        db.session.commit()
 
     def save_to_db(self):
         db.session.add(self)

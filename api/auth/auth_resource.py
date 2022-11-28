@@ -3,8 +3,8 @@ from flask_jwt_extended import create_access_token
 
 from api.common.auth_util import AuthUtil
 
-from auth_model import AuthModel
-from auth_schema import AuthSchema
+from .auth_model import AuthModel
+from .auth_schema import AuthSchema
 
 schema = AuthSchema()
 
@@ -39,7 +39,8 @@ class AuthResource(Resource):
         }, 201
         
 
-
+    ## TODO
+    # Finish this...
     """
     Update existing credentials
     """
@@ -77,17 +78,3 @@ class AuthResource(Resource):
         return {
             'access_token': jwt_token,
         }, 201
-
-
-    def sampleSave(self):
-
-        # example = ExampleModel(args['first_name'],args['last_name'],args['email'],args['phone'],args['addresses'])
-        # 
-        # try:
-        #     example.save_to_db()
-        #     return "Example Updated", 200
-        # except:
-        #     return "Error saving to database", 403
-
-
-        print(self)

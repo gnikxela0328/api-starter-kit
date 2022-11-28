@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+
+  db:
+    image: "postgres:15.1-alpine"
+    container_name: starterkit-db
+    volumes: 
+      - starterkit-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB:starterkit
+      - POSTGRES_USER:starter
+      - POSTGRES_PASSWORD:password
+  
+  api:
+    build: .
+    container_name: starterkit-api
+    environment: 
+      - DB_SERVER=starterkit-db
+    ports:
+      - 8080:5000
+    links:
+      - starterkit-db
+
+volumes:
+  starterkit-data:
