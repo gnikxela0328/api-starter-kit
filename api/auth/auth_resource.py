@@ -17,18 +17,21 @@ class AuthResource(Resource):
         args = request.json
         err = schema.validate(args)
         if err:
+            print("bad args", flush=True)
             return "Incorrect Arguments", 400
 
         # Check for exisiting user
         user = AuthModel.find_by_email(args["email"])
         if user is None:
-            return "Bad username or password", 401
+            return {
+                'message': "Bad username or password"
+            }, 401
         
         # Validate credentials
         if not AuthUtil.validate_user(user=user, password=args['password']):
             return {
-                'message': "Error authenticating"
-            }, 400
+                'message': "Bad username or password"
+            }, 401
 
         # Password is good, Create JWT Token and update in db
         jwt_token = create_access_token(identity=user.uuid)
@@ -68,7 +71,7 @@ class AuthResource(Resource):
         new_hash = AuthUtil.hash_password(args['password'])
 
         if new_hash is not None:
-            AuthModel.update_user(new_hash)
+            AuthModel.update_user_password(user=user, password=new_hash)
         else:
             return {
                 'message': "Error authenticating"

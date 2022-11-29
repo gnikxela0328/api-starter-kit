@@ -14,17 +14,19 @@ class AuthUtil():
         # Check password hash to see if it matches db
         try:
             if not bcrypt.checkpw(b64pwd, user.password.encode('utf8')):
-                return "Bad Username or Password", 401
+                return False
         except:
             return False
         
+        print("success", flush=True)
         return True
     
     def hash_password(password):
         # Create password hash
         try:
             b64pwd = b64encode(SHA256.new(password.encode('utf8')).digest())
+            hash_pass = bcrypt.hashpw(b64pwd, bcrypt.gensalt(14))
         except:
             return False
         
-        return b64pwd
+        return hash_pass
