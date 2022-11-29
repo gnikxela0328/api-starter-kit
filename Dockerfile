@@ -16,5 +16,4 @@ RUN \
 
 # Start app
 COPY . .
-EXPOSE 5000
-RUN flask run
+CMD ["python3", "api/app.py"]
