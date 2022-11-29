@@ -38,9 +38,7 @@ class AuthResource(Resource):
             'access_token': jwt_token,
         }, 201
         
-
-    ## TODO
-    # Finish this...
+        
     """
     Update existing credentials
     """
@@ -55,8 +53,13 @@ class AuthResource(Resource):
         if user is None:
             return "Bad username or password", 401
 
+        if request.headers["Authorization"] is None:
+            return {
+                'message': "Error authenticating"
+            }, 400
+
         # Validate credentials
-        if not AuthUtil.validate_user(user=user, password=args['password']):
+        if not AuthModel.validate_token(user=user, token=request.headers["Authorization"]):
             return {
                 'message': "Error authenticating"
             }, 400

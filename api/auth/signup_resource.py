@@ -28,6 +28,7 @@ class SignupResource(Resource):
         # Hash password
         password = AuthUtil.hash_password(args['password'])
         if not password:
+            print("Bad password hash")
             return {
                 'message': "Error creating user"
             }, 401
@@ -49,6 +50,7 @@ class SignupResource(Resource):
                 'message': "New user created!"
             }, 201
         except:
+            print("bad save")
             return {
                 'message': "Error creating user"
             }, 403

@@ -7,7 +7,7 @@ class AuthModel(db.Model):
     """
     Allowed data
     """
-    uuid=db.Column(db.Integer, primary_key=True, autoincrement="auto")
+    uuid=db.Column(db.String(36), primary_key=True, autoincrement="auto")
     email = db.Column(db.String(255),nullable=False)
     password = db.Column(db.String(255),nullable=False)
     current_token = db.Column(db.String(311))
@@ -27,6 +27,15 @@ class AuthModel(db.Model):
             return user
         else:
             return None
+    
+    def validate_token(user, token):
+        if user.current_token == token:
+            return True
+        return False
+
+    def update_user_password(user, password):
+        user.password = password
+        db.session.commit()
 
     def update_token(user, token):
         user.current_token = token

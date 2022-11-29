@@ -16,4 +16,4 @@ RUN \
 
 # Start app
 COPY . .
-CMD ["python3", "api/app.py"]
+CMD ["python3", "app.py"]

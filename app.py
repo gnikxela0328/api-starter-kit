@@ -33,6 +33,7 @@ db.init_app(app)
 # Initialize database
 @app.before_first_request
 def create_tables():
+    db.drop_all()
     db.create_all()
 
 # Routes

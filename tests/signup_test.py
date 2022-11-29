@@ -16,4 +16,6 @@ def test_signup():
     response = app.test_client().post("/api/signup/", data=json.dumps(data), headers=headers)
 
     assert response.status_code == 201
-    print(response.data.decode('utf-8'))
+    res_data = json.loads(response.data)
+    assert "jwt_token" in res_data
+    print(res_data["jwt_token"])
