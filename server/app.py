@@ -13,17 +13,13 @@ from api.auth.auth_resource import AuthResource
 from api.auth.signup_resource import SignupResource
 #from api.user.user_resource import UserResource
 
-
 # Initialize app
 app = Flask(__name__)
 CORS(app)
 
-## TODO
-## Change this to postgres and include postgres into docker image
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://' + DB_CONFIG['DB_USER'] + ':' + DB_CONFIG['DB_PASS'] +'@' + DB_CONFIG['DB_DOMAIN'] 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = JWT_SECRET
-
 
 api = Api(app)
 jwt = JWTManager(app)

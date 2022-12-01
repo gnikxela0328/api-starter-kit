@@ -1,6 +1,6 @@
 import pytest
 import json
-from app import app
+from server.app import app
 
 def test_signup():
 

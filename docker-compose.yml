@@ -16,7 +16,7 @@ services:
   
   api:
     build: 
-      context: .
+      context: ./server/
     container_name: starterkit-api
     environment: 
       - DB_SERVER=db
