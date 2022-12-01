@@ -3,19 +3,20 @@ from flask_jwt_extended import create_access_token
 
 from api.common.auth_util import AuthUtil
 
-from .auth_model import AuthModel
-from .auth_schema import AuthSchema
-
-schema = AuthSchema()
+from auth_model import AuthModel
+from auth_schema import AuthSchema
 
 class AuthResource(Resource):
+
+    def __init__(self):
+        self.schema = AuthSchema()
 
     """
     Sign in using credentials
     """
     def post(self):
         args = request.json
-        err = schema.validate(args)
+        err = self.schema.validate(args)
         if err:
             print("bad args", flush=True)
             return "Incorrect Arguments", 400
@@ -47,7 +48,7 @@ class AuthResource(Resource):
     """
     def put(self):
         args = request.json
-        err = schema.validate(args)
+        err = self.schema.validate(args)
         if err:
             return "Incorrect Arguments", 400
 

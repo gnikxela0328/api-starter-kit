@@ -12,5 +12,5 @@ docker-compose up --build
 
 The API is accessible on port 8080 (frontend coming soon)
 
-Currently, testing is done manually using tests/manual_tests/run_tests.py
+Currently, testing is done manually using server/tests/manual_tests/run_tests.py
 

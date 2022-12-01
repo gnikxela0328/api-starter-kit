@@ -4,19 +4,21 @@ import uuid
 
 from api.common.auth_util import AuthUtil
 
-from .auth_model import AuthModel
-from .signup_schema import SignupSchema
-
-schema = SignupSchema()
+from auth_model import AuthModel
+from signup_schema import SignupSchema
 
 
 class SignupResource(Resource):
+
+    def __init__(self):
+        self.schema = SignupSchema()
+
     """
     Sign up using email and password
     """
     def post(self):
         args = request.json
-        err = schema.validate(args)
+        err = self.schema.validate(args)
         if err:
             return "Incorrect Arguments", 400
 

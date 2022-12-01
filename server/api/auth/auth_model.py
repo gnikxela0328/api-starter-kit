@@ -32,6 +32,14 @@ class AuthModel(db.Model):
         if user.current_token == token:
             return True
         return False
+    
+    def lookup_token(token):
+        user = AuthModel.query.filter_by(current_token=token).first()
+
+        if user is None:
+            return None
+        else:
+            return user.uuid
 
     def update_user_password(user, password):
         user.password = password
