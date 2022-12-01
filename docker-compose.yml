@@ -18,6 +18,8 @@ services:
     build: 
       context: ./server/
     container_name: starterkit-api
+    env_file:
+      - ./server/.env.example
     environment: 
       - DB_SERVER=db
     ports:
