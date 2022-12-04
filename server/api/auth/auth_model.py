@@ -39,7 +39,7 @@ class AuthModel(db.Model):
         if user is None:
             return None
         else:
-            return user.uuid
+            return user
 
     def update_user_password(user, password):
         user.password = password

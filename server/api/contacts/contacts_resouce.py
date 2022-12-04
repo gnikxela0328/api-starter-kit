@@ -1,4 +1,5 @@
 import uuid
+import json
 from flask_restful import Resource, request
 
 from .contacts_model import ContactsModel
@@ -17,14 +18,18 @@ class ContactsResource(Resource):
     Create a new contact
     """
     def post(self):
-        args = request.args
+        args = request.json
         err = self.create_schema.validate(args)
         if (err):
-            return "Incorrect Parameters Provided", 400
+            return {"message": "Incorrect Parameters Provided"}, 400
 
         if "Authorization" in request.headers:
             user = AuthModel.lookup_token(request.headers['Authorization'])
             if user is not None:
+
+                print(args, flush=True)
+                print(args['first_name'], flush=True)
+
                 contact_uuid = str(uuid.uuid4())
                 owner_uuid = user.uuid
                 first_name = args["first_name"] if "first_name" in args else None
@@ -36,13 +41,16 @@ class ContactsResource(Resource):
                 deleted = 0
 
                 try:
-                    new_contact = AuthModel(uuid=contact_uuid, owner_uuid=owner_uuid, first_name=first_name, 
+                    new_contact = ContactsModel(uuid=contact_uuid, owner_uuid=owner_uuid, first_name=first_name, 
                     last_name=last_name, email=email, discord_username=discord_username, 
-                    github_username=github_username, twitter_username=twitter_username)
+                    github_username=github_username, twitter_username=twitter_username, deleted=deleted)
 
+                    print("Contact object created", flush=True)
                     new_contact.save_to_db()
-                except:
-                   return {
+                    print("Contact saved", flush=True)
+                except Exception as e:
+                    print(e, flush=True)
+                    return {
                     "message": "Error creating contact"
                 }, 400 
             else:
@@ -55,7 +63,8 @@ class ContactsResource(Resource):
             }, 400
 
         return {
-                "message": "Contact created"
+                "message": "Contact created",
+                "uuid": contact_uuid
             }, 201
 
 
@@ -68,6 +77,15 @@ class ContactsResource(Resource):
             user = AuthModel.lookup_token(request.headers['Authorization'])
             if user is not None:
                 contact_list = ContactsModel.get_all_contacts(owner_uuid=user.uuid)
+                for x in contact_list:
+                    contacts.append({
+                        "first_name": x.first_name,
+                        "last_name": x.last_name,
+                        "email": x.email,
+                        "discord_username": x.discord_username,        
+                        "github_username": x.github_username,
+                        "twitter_username": x.twitter_username  
+                    })
             else:
                 return {
                     "message": "Unauthorized"
@@ -78,20 +96,19 @@ class ContactsResource(Resource):
             }, 400
 
         return {
-                contacts
+                "contacts": json.dumps(contacts)
             }, 200
 
     def put(self):
-        args = request.args
+        args = request.json
         err = self.update_schema.validate(args)
         if (err):
-            return "Incorrect Parameters Provided", 400
+            return {"message": "Incorrect Parameters Provided"}, 400
 
         if "Authorization" in request.headers:
             user = AuthModel.lookup_token(request.headers['Authorization'])
             if user is not None:
-                contact = ContactsModel.find_by_uuid(args["uuid"])
-
+                contact = ContactsModel.find_by_uuid(uuid=args["uuid"], owner_uuid=user.uuid)
                 if contact is not None:
                     contact.first_name = args["first_name"] if "first_name" in args else contact.first_name
                     contact.last_name = args["last_name"] if "last_name" in args else contact.last_name
@@ -121,22 +138,40 @@ class ContactsResource(Resource):
 
         return {
             "message": "Contact successfully updated"
-        }, 200
+        }, 201
     
     def delete(self):
         if "Authorization" in request.headers:
-            user = AuthModel.lookup_token(request.headers['Authorization'])
-            if user is not None:
-                contact = ContactsModel.prepare_for_delete(owner_uuid=user.uuid, contact_uuid="")
-            else:
-                return {
-                    "message": "Unauthorized"
-                }, 400    
+                user = AuthModel.lookup_token(request.headers['Authorization'])
+                if user is not None:
+                    print(request.args.get("user"), flush=True)
+                    if request.args.get("user"):
+                        contact = ContactsModel.find_by_uuid(owner_uuid=user.uuid, uuid=request.args.get("user"))
+                        if contact is not None:
+                            try:
+                                contact.deleted = 1
+                                contact.save_to_db()
+                            except:
+                                return {
+                                    "message": "Error deleting user"
+                                }, 400
+                        else:
+                            return {
+                                "Incorrect parameters"
+                            }, 400
+                    else:
+                        return {
+                            "message": "Incorrect parameters"
+                        }, 400
+                else:
+                    return {
+                        "message": "Unauthorized"
+                    }, 400    
         else:
             return {
                 "message": "Unauthorized"
             }, 400
 
         return {
-                contacts
-            }, 200
+                "message": "Contact successfully deleted"
+            }, 201

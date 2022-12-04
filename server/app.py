@@ -11,7 +11,7 @@ from api.keys import DB_CONFIG, JWT_SECRET
 # Resources
 from api.auth.auth_resource import AuthResource
 from api.auth.signup_resource import SignupResource
-#from api.user.user_resource import UserResource
+from api.contacts.contacts_resouce import ContactsResource
 
 # Initialize app
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def create_tables():
 # Routes
 api.add_resource(AuthResource, '/api/auth/')
 api.add_resource(SignupResource, '/api/signup/')
-
+api.add_resource(ContactsResource, '/api/contacts/')
 
 if __name__ == '__main__':
     

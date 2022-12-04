@@ -5,7 +5,7 @@ Used to validate fields from incoming requests
 """
 
 class CreateContact(Schema):
-    first_name = fields.Str(required=False)
+    first_name = fields.Str(required=True)
     last_name = fields.Str(required=False)
     email = fields.Str(required=False)
     discord_username = fields.Str(required=False)    
@@ -14,4 +14,5 @@ class CreateContact(Schema):
 
 class UpdateContact(CreateContact):
     uuid = fields.Str(required=True) 
+    first_name = fields.Str(required=False)
     

@@ -29,8 +29,14 @@ class ContactsModel(db.Model):
         self.deleted = deleted
         
     def get_all_contacts(owner_uuid):
-        contact_list = ContactsModel.query.filter_by(owner_uuid=owner_uuid).all()
+        contact_list = ContactsModel.query.filter_by(owner_uuid=owner_uuid, deleted=0).all()
         return contact_list
+
+    def find_by_uuid(uuid, owner_uuid):
+        contact = ContactsModel.query.filter_by(uuid=uuid, owner_uuid=owner_uuid).first()
+        if contact:
+            return contact
+        return None
     
 
     def save_to_db(self):

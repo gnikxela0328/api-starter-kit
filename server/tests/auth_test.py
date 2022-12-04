@@ -5,7 +5,6 @@ headers = {
     "Content-Type": "application/json"
 }
 
-
 def test_signup():
     data = {
         "email": "alex@alex.com",
