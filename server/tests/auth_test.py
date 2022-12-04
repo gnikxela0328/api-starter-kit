@@ -11,7 +11,7 @@ def test_signup():
         "password": "alexpassword"
     }
 
-    response = requests.post(url="http://0.0.0.0:8080/api/signup/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/signup/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert response.status_code == 201
@@ -25,7 +25,7 @@ def test_successful_authenticate():
         "password": "alexpassword"
     }
 
-    response = requests.post(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert response.status_code == 201
@@ -39,7 +39,7 @@ def test_failed_authenticate():
         "password": "alexpassword"
     }
 
-    response = requests.post(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert response.status_code == 401
@@ -55,7 +55,7 @@ def test_update_credentials():
         "password": "alexpassword"
     }
 
-    response = requests.post(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     # Add token to headers, update password
@@ -65,7 +65,7 @@ def test_update_credentials():
         "password": "alexnewpassword"
     }
 
-    response = requests.put(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.put(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert response.status_code == 201
@@ -78,7 +78,7 @@ def test_update_credentials():
         "password": "alexpassword"
     }
 
-    response = requests.put(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.put(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     pass

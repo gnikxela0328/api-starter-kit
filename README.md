@@ -16,10 +16,9 @@ The API is accessible on port 8080 (frontend coming soon)
 To test:
 
 ```
-source server/.env/bin/activate
-pip3 install -r server/requirements.txt
+docker-compose up -d
 
-pytest
+docker-compose run api pytest .
 ```
 
 

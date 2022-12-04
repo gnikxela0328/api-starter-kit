@@ -14,7 +14,7 @@ def create_testuser():
         "password": "testpassword"
     }
 
-    requests.post(url="http://0.0.0.0:8080/api/signup/", json=data, headers=headers)
+    requests.post(url="http://api:5000/api/signup/", json=data, headers=headers)
     
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def authenticate():
         "password": "testpassword"
     }
 
-    response = requests.post(url="http://0.0.0.0:8080/api/auth/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/auth/", json=data, headers=headers)
     res = json.loads(response.content)
 
     return res["access_token"]
@@ -41,7 +41,7 @@ def create_contact_uuid(authenticate):
     }
     headers["Authorization"] = authenticate
 
-    response = requests.post(url="http://0.0.0.0:8080/api/contacts/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/contacts/", json=data, headers=headers)
     res = json.loads(response.content)
 
     return res["uuid"]
@@ -59,7 +59,7 @@ def test_create_contact(authenticate):
     }
     headers["Authorization"] = authenticate
 
-    response = requests.post(url="http://0.0.0.0:8080/api/contacts/", json=data, headers=headers)
+    response = requests.post(url="http://api:5000/api/contacts/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert res["message"] == "Contact created"
@@ -69,7 +69,7 @@ def test_create_contact(authenticate):
 def test_get_contacts(authenticate):
     headers["Authorization"] = authenticate
 
-    response = requests.get(url="http://0.0.0.0:8080/api/contacts/", headers=headers)
+    response = requests.get(url="http://api:5000/api/contacts/", headers=headers)
     res = json.loads(response.content)
 
     assert any(res["contacts"])
@@ -86,7 +86,7 @@ def test_update_contact(authenticate, create_contact_uuid):
     }
     headers["Authorization"] = authenticate
 
-    response = requests.put(url="http://0.0.0.0:8080/api/contacts/", json=data, headers=headers)
+    response = requests.put(url="http://api:5000/api/contacts/", json=data, headers=headers)
     res = json.loads(response.content)
 
     assert res["message"] == "Contact successfully updated"
@@ -95,7 +95,7 @@ def test_update_contact(authenticate, create_contact_uuid):
 def test_delete_contact(authenticate, create_contact_uuid):
     headers["Authorization"] = authenticate
 
-    response = requests.delete(url="http://0.0.0.0:8080/api/contacts/?user=" + create_contact_uuid, headers=headers)
+    response = requests.delete(url="http://api:5000/api/contacts/?user=" + create_contact_uuid, headers=headers)
     res = json.loads(response.content)
 
     assert res["message"] == "Contact successfully deleted"
