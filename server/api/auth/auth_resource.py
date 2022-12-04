@@ -3,8 +3,8 @@ from flask_jwt_extended import create_access_token
 
 from api.common.auth_util import AuthUtil
 
-from auth_model import AuthModel
-from auth_schema import AuthSchema
+from .auth_model import AuthModel
+from .auth_schema import AuthSchema
 
 class AuthResource(Resource):
 

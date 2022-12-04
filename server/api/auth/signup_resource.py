@@ -4,8 +4,8 @@ import uuid
 
 from api.common.auth_util import AuthUtil
 
-from auth_model import AuthModel
-from signup_schema import SignupSchema
+from .auth_model import AuthModel
+from .signup_schema import SignupSchema
 
 
 class SignupResource(Resource):

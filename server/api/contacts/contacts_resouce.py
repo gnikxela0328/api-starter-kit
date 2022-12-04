@@ -1,8 +1,8 @@
 import uuid
 from flask_restful import Resource, request
 
-from contacts_model import ContactsModel
-from contacts_schema import CreateContact, UpdateContact
+from .contacts_model import ContactsModel
+from .contacts_schema import CreateContact, UpdateContact
 from api.auth.auth_model import AuthModel
 
 
